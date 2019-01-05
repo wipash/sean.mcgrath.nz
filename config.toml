@@ -1,3 +1,36 @@
 baseURL = "https://sean.mcgrath.nz/"
 languageCode = "en-us"
-title = "Sean McGrath"
+title = "Sean's Blog"
+theme = "beautifulhugo"
+newContentEditor = "vim"
+metaDataFormat = "yaml"
+PygmentsCodeFences = true
+PygmentsCodefencesGuessSyntax = true
+PygmentsStyle = "dracula"
+disqusShortname = "seanmcgrathnz"
+googleAnalytics = "UA-10214740-7"
+
+[Params]
+  subtitle = "A blog about technology"
+  rss = true
+  comments = true
+  readingTime = true
+  socialShare = true
+
+[Author]
+  name = "Sean McGrath"
+  website = "https://sean.mcgrath.nz"
+  email = "sean@mcgrath.nz"
+  github = "wipash"
+  gitlab = "wipash"
+  linkedin = "sean-m-mcgrath"
+
+[[menu.main]]
+  name = "Blog"
+  url = ""
+  weight = 1
+
+[[menu.main]]
+  name = "About"
+  url = "page/about/"
+  weight = 2

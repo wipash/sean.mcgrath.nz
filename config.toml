@@ -3,21 +3,26 @@ languageCode = "en-us"
 title = "Sean's Blog"
 theme = "beautifulhugo"
 newContentEditor = "vim"
-metaDataFormat = "yaml"
+metaDataFormat = "toml"
 PygmentsCodeFences = true
 PygmentsCodefencesGuessSyntax = true
 PygmentsStyle = "dracula"
 disqusShortname = "seanmcgrathnz"
 googleAnalytics = "UA-10214740-7"
+summaryLength = 30
+enableEmoji = true
+copyright = "Copyright &copy; 2019 - Sean McGrath"
+canonifyurls = true
 
-[Params]
+[params]
   subtitle = "A blog about technology"
+  dateFormat = "Jan 2, 2006"
   rss = true
   comments = true
-  readingTime = true
+  readingTime = false
   socialShare = true
 
-[Author]
+[author]
   name = "Sean McGrath"
   website = "https://sean.mcgrath.nz"
   email = "sean@mcgrath.nz"

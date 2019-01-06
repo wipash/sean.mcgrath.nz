@@ -1,7 +1,7 @@
----
-title: "How To Build This Blog"
-date: 2019-01-05T18:08:35+13:00
----
++++
+title = "How To Build This Blog"
+date = 2019-01-05T18:08:35+13:00
++++
 
 This blog is built using [Hugo](https://gohugo.io/) and the [Beautiful Hugo](https://github.com/halogenica/beautifulhugo) theme.
 The generated static pages are hosted using [Netlify](https://www.netlify.com/).
@@ -66,18 +66,26 @@ PygmentsCodeFences = true               # Lets you use three backticks to signif
                                         #   GitHub Code Fences style
 PygmentsCodefencesGuessSyntax = true
 PygmentsStyle = "dracula"               # Code highlighting style
+disqusShortname = "seanmcgrathnz"
+googleAnalytics = "UA-10214740-7"
+summaryLength = 30                      # Number of words to auto cut the summary for each article
+enableEmoji = true                      # Lets you emojify text like "\:heart\:" -> :heart:
+copyright = "Copyright &copy; 2019 - Sean McGrath"
+canonifyurls = true                     # Sets all URLs to include the baseURL, instead of 
+                                        #   being relative
 
 # 
 # The following section is specific to the beautifulhugo theme
 #
-[Params]
+[params]
+  dateFormat = "Jan 2, 2006"
   subtitle = "A blog about technology"
   rss = true
   comments = true
   readingTime = true
   socialShare = true
 
-[Author]                                # Details to put in the footer
+[author]                                # Details to put in the footer
   name = "Sean McGrath"
   website = "https://sean.mcgrath.nz"
   email = "sean@mcgrath.nz"

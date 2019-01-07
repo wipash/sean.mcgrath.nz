@@ -16,6 +16,7 @@ canonifyurls = true
 
 [params]
   subtitle = "A blog about technology"
+  logo = "img/logo.png"
   dateFormat = "Jan 2, 2006"
   rss = true
   comments = true

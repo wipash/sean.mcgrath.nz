@@ -39,28 +39,35 @@ Install VS Code
 Configure VS Code
 -----------------
 VS Code is extremely extensible through the use of **Extensions**.
-
 To start installing extensions, open the Extensions sidebar, and then search for and install the **PowerShell** extension by Microsoft.
+
+![Install PowerShell Extension](/img/install-powershell-extension.png)
 
 You're basically ready to go now, but the experience can be greatly improved by setting some configuration options.
 
 1. Open **File -> Preferences -> Settings**, or press <kbd>Ctrl</kbd>+<kbd>,</kbd>
+![Open the settings editor](/img/open-settings.png)
+
 2. Click the <kbd>{}</kbd> button in the top right corner to **Open Settings (JSON)**
 3. Add the following lines:
 
 ```JSON
-// Set the default version of PowerShell to use
-"powershell.powerShellExePath": "C:/Program Files/PowerShell/6/pwsh.exe",
-// Keep focus in the editor when you execute script with F8
-"powershell.integratedConsole.focusConsoleOnExecute": false,
-// Enable Tab completion
-"editor.tabCompletion": "on",
-// Optional: Show whitespace characters in the editor
-"editor.renderWhitespace": "all",
-// Optional: Automatically trim trailing whitespace from files when saving
-"files.trimTrailingWhitespace": true
+{
+    // Set the default version of PowerShell to use
+    "powershell.powerShellExePath": "C:/Program Files/PowerShell/6/pwsh.exe",
+    // Keep focus in the editor when you execute script with F8
+    "powershell.integratedConsole.focusConsoleOnExecute": false,
+    // Enable Tab completion
+    "editor.tabCompletion": "on",
+    // Optional: Show whitespace characters in the editor
+    "editor.renderWhitespace": "all",
+    // Optional: Automatically trim trailing whitespace from files when saving
+    "files.trimTrailingWhitespace": true
+}
 ```
 
-To apply the changes, open the command pallette with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, type `Reload` and press <kbd>Enter</kbd>
 
-Now you're ready to go!
+![Enter settings](/img/settings-entered.png)
+
+
+Save the file, and you're ready to go!

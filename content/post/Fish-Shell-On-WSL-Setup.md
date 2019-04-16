@@ -32,6 +32,46 @@ Add-AppxPackage -Path ~/Ubuntu.appx
 ```
 Alternatively, install your favourite distribution from the Microsoft Store.
 
+## Add Windows Defender exclusions for WSL
+Windows Defender realtime protection has a significant performance impact to WSL.
+Use the following PowerShell script (from an administrative PowerShell prompt) to exclude WSL from Windows Defender realtime scanning:
+
+Credit: https://gist.github.com/noelbundick/9c804a710eb76e1d6a234b14abf42a52#file-excludewsl-ps1
+```powershell
+# Find registered WSL environments
+$wslPaths = (Get-ChildItem HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss | ForEach-Object { Get-ItemProperty $_.PSPath}).BasePath
+
+# Get the current Windows Defender exclusion paths
+$currentExclusions = $(Get-MpPreference).ExclusionPath
+if (!$currentExclusions) {
+  $currentExclusions = ''
+}
+
+# Find the WSL paths that are not excluded
+$exclusionsToAdd = ((Compare-Object $wslPaths $currentExclusions) | Where-Object SideIndicator -eq "<=").InputObject
+
+# List of paths inside the Linux distro to exclude (https://github.com/Microsoft/WSL/issues/1932#issuecomment-407855346)
+$dirs = @("\bin", "\sbin", "\usr\bin", "\usr\sbin", "\usr\local\bin", "\usr\local\go\bin")
+
+# Add the missing entries to Windows Defender
+if ($exclusionsToAdd.Length -gt 0) {
+  $exclusionsToAdd | ForEach-Object {
+
+    # Exclude paths from the root of the WSL install
+    Add-MpPreference -ExclusionPath $_
+    Write-Output "Added exclusion for $_"
+
+    # Exclude processes contained inside WSL
+    $rootfs = $_ + "\rootfs"
+    $dirs | ForEach-Object {
+        $exclusion = $rootfs + $_ + "\*"
+        Add-MpPreference -ExclusionProcess $exclusion
+        Write-Output "Added exclusion for $exclusion"
+    }
+  }
+}
+```
+
 ## Initial WSL Config
 I want to use a username that is forbidden by the `NAME_REGEX` in Ubuntu, so we'll initially configure Ubuntu with the `root` user and then create a new user once logged in.
 ```powershell
@@ -95,7 +135,7 @@ ssh-keygen -t rsa -b 4096 -o -a 100
 #   -o       --> use then OpenSSH key format, instead of the default PEM
 #   -a 100   --> run 100 rounds of key derivations, to make the key more brute-force resistant
 
-# Alternatively you can generate a key using the new Ed25519 scheme, 
+# Alternatively you can generate a key using the new Ed25519 scheme,
 #  which may not have complete adoption yet: https://ianix.com/pub/ed25519-deployment.html
 ssh-keygen -t ed25519 -a 100
 ```

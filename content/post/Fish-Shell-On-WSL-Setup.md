@@ -32,6 +32,31 @@ Add-AppxPackage -Path ~/Ubuntu.appx
 ```
 Alternatively, install your favourite distribution from the Microsoft Store.
 
+## Initial WSL Config
+I want to use a username that is forbidden by the `NAME_REGEX` in Ubuntu, so we'll initially configure Ubuntu with the `root` user and then create a new user once logged in.
+```powershell
+ubuntu install --root
+ubuntu
+```
+Now, within the Ubuntu shell, create a new user:
+```bash
+# Add the new user
+adduser sean.mcgrath --force-badname
+# Add the user to the group allowed to run sudo
+usermod -G sudo sean.mcgrath
+# Set a password for the new user
+passwd sean.mcgrath
+
+# Make sure we're up to date
+apt update && apt upgrade -y
+
+logout
+```
+Back in PowerShell, update WSL's config to always log in with your new user
+```powershell
+ubuntu config --default_user sean.mcgrath
+```
+
 ## Add Windows Defender exclusions for WSL
 Windows Defender realtime protection has a significant performance impact to WSL.
 Use the following PowerShell script (from an administrative PowerShell prompt) to exclude WSL from Windows Defender realtime scanning:
@@ -70,31 +95,6 @@ if ($exclusionsToAdd.Length -gt 0) {
     }
   }
 }
-```
-
-## Initial WSL Config
-I want to use a username that is forbidden by the `NAME_REGEX` in Ubuntu, so we'll initially configure Ubuntu with the `root` user and then create a new user once logged in.
-```powershell
-ubuntu install --root
-ubuntu
-```
-Now, within the Ubuntu shell, create a new user:
-```bash
-# Add the new user
-adduser sean.mcgrath --force-badname
-# Add the user to the group allowed to run sudo
-usermod -G sudo sean.mcgrath
-# Set a password for the new user
-passwd sean.mcgrath
-
-# Make sure we're up to date
-apt update && apt upgrade -y
-
-logout
-```
-Back in PowerShell, update WSL's config to always log in with your new user
-```powershell
-ubuntu config --default_user sean.mcgrath
 ```
 
 ## Fish Installation

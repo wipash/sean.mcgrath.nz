@@ -102,6 +102,8 @@ Now we can start Ubuntu, automatically logged in as our new user, from the Start
 In this process we'll be installing Fish, and the package manager [Oh My Fish](https://github.com/oh-my-fish/oh-my-fish)
 ```bash
 # Start by installing Fish
+sudo apt-add-repository ppa:fish-shell/release-3
+sudo apt update
 sudo apt -y install fish
 sudo apt -y upgrade && sudo apt -y autoremove
 

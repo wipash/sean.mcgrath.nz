@@ -181,3 +181,13 @@ else
     start_agent
 end
 ```
+
+## Further Fish config
+Install the foreign environment plugin, to easily import your Bash profile
+```bash
+omf install foreign-env
+```
+Edit `~/.config/fish/config.fish` to use the plugin to import your Bash profile on login
+```bash
+fenv source ~/.profile
+```

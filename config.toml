@@ -12,7 +12,7 @@ googleAnalytics = "UA-10214740-7"
 summaryLength = 30
 enableEmoji = true
 copyright = "Copyright &copy; 2019 - Sean McGrath"
-canonifyurls = true
+canonifyurls = false
 
 [params]
   subtitle = "A blog about technology"

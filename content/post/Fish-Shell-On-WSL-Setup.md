@@ -182,8 +182,24 @@ else
 end
 ```
 
+## Install NVM
+NVM doesn't support Fish out of the box, but you can make it work as follows:
+```bash
+# Install the Bass plugin: https://github.com/edc/bass
+omf install bass
+
+# Install NVM (version may have changed): https://github.com/nvm-sh/nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+```
+Once installed, add the following to `~/.config/fish/functions/nvm.fish` to automatically load NVM:
+```bash
+function nvm
+    bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
+end
+```
+
 ## Further Fish config
-Install the foreign environment plugin, to easily import your Bash profile
+Install the foreign environment plugin, to easily import your Bash profile. Only install this if you really need it.
 ```bash
 omf install foreign-env
 ```

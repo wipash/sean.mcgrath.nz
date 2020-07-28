@@ -166,7 +166,7 @@ echo '
 source /etc/grc.fish
 function ls --inherit-variable executable --wraps=ls
     if isatty 1
-        grc ls --color -C $argv
+        grc ls --color -C -w(tput cols) $argv
     else
         eval command ls $argv
     end

@@ -1,50 +1,41 @@
-+++
-title = "How To Build This Blog"
-date = 2019-01-05T18:08:35+13:00
-+++
+---
+title: "How To Build This Blog"
+date: 2019-01-05T18:08:35+13:00
+tags:
+  - Hugo
+---
 
 This blog is built using [Hugo](https://gohugo.io/) and the [Beautiful Hugo](https://github.com/halogenica/beautifulhugo) theme.
 The generated static pages are hosted using [Netlify](https://www.netlify.com/).
 <!--more-->
 ### Software Assumptions
 - Ubuntu
-- [Fish](https://fishshell.com/) shell
+- [Fish](https://fishshell.com/) shell and [Homebrew](https://brew.sh/), set up with [this guide]({{< ref "/post/Fish-Shell-Setup" >}})
 
 ## Environment setup
 
-The commands here are somewhat specific to [fish](https://fishshell.com/), but can easily be converted to bash.
-First up, we need to install hugo:
+First up, we need to install hugo.
 ```fish
-cd ~
-set ver 0.53    # This is the fish way of setting variables
-wget https://github.com/gohugoio/hugo/releases/download/v"$ver"/hugo_"$ver"_Linux-64bit.deb
-sudo dpkg --install hugo_"$ver"_Linux-64bit.deb"
-```
-
-Beacuse we're using fish, we should get the autocompletion working for hugo
-```
-mkdir --parents ~/.config/fish/completions
-wget https://raw.githubusercontent.com/fish-shell/fish-shell/master/share/completions/hugo.fish \
-    --output-document ~/.config/fish/completions/hugo.fish
+brew install hugo
 ```
 
 This site will live in a GitHub repo, so go ahead and create that. In this document, the repo is called `sean.mcgrath.nz`
 Once the repo is created, clone it and create a new hugo site. Because the directory we're going to use will already exist (and may have files in it), we'll need to call `hugo` with the `--force` flag.
-```
+```fish
 cd ~/dev
-git clone https://github.com/wipash/sean.mcgrath.nz.git
+git clone git@github.com:wipash/sean.mcgrath.nz.git
 cd sean.mcgrath.nz
 hugo new site ./ --force
 ```
 
 To ensure that git includes all the directories that have just been created (it will exclude empty dirs by default), create a .gitkeep file within each one.
-Again, this syntax is fish specific.
+This syntax is specific to [fish](https://fishshell.com/), but can easily be converted to bash.
 ```fish
 for DIR in (ls -p | grep /); touch $DIR.gitkeep; end
 ```
 
 We don't want the locally rendered site to ever be added to the repo, so exclude it by using the .gitignore file
-```
+```fish
 echo "public" >> .gitignore
 ```
 
@@ -57,61 +48,46 @@ The settings I've set for this site are as follows:
 ```toml
 baseURL = "https://sean.mcgrath.nz/"
 languageCode = "en-us"
-title = "Sean's Blog"
-theme = "beautifulhugo"                 # Name of the theme to use, matches the name of the
+title = "Sean McGrath"
+theme = "yinyang"                       # Name of the theme to use, matches the name of the
                                         #   folder in /themes/
-newContentEditor = "vim"                # This is the editor that hugo will open when you create a new 
+newContentEditor = "vim"                # This is the editor that hugo will open when you create a new
                                         #   page or post
-PygmentsCodeFences = true               # Lets you use three backticks to signify a code block, 
-                                        #   GitHub Code Fences style
+metaDataFormat = "toml"
+PygmentsCodeFences = true
 PygmentsCodefencesGuessSyntax = true
 PygmentsStyle = "dracula"               # Code highlighting style
-disqusShortname = "seanmcgrathnz"
-googleAnalytics = "UA-10214740-7"
-summaryLength = 30                      # Number of words to auto cut the summary for each article
 enableEmoji = true                      # Lets you emojify text like "\:heart\:" -> :heart:
-copyright = "Copyright &copy; 2019 - Sean McGrath"
-canonifyurls = true                     # Sets all URLs to include the baseURL, instead of 
-                                        #   being relative
 
-# 
-# The following section is specific to the beautifulhugo theme
-#
 [params]
-  dateFormat = "Jan 2, 2006"
-  subtitle = "A blog about technology"
-  rss = true
-  comments = true
-  readingTime = true
-  socialShare = true
+  # disqus = "seanmcgrathnz"
+  mainSections = ["post"]
+  copyrightContent = "© 2019 Sean McGrath"
+  extraHead = "<script async src='https://www.googletagmanager.com/gtag/js?id=UA-10214740-7'></script><script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-10214740-7');</script>"
 
-[author]                                # Details to put in the footer
+[author]
   name = "Sean McGrath"
-  website = "https://sean.mcgrath.nz"
+  homepage = "https://sean.mcgrath.nz"
   email = "sean@mcgrath.nz"
   github = "wipash"
   gitlab = "wipash"
   linkedin = "sean-m-mcgrath"
 
-[[menu.main]]                           # Items to put in the top menu. These are double bracketed so
-  name = "Blog"                         #   that they become an array of tables. See the TOML spec:
-  url = ""                              #   https://github.com/toml-lang/toml#array-of-tables
-  weight = 1
-
-[[menu.main]]
-  name = "About"
-  url = "page/about/"
-  weight = 2
+[[params.socials]]                      # Items to put in the bottom menu. These are double bracketed so
+  name = "Github"                       #   that they become an array of tables. See the TOML spec:
+  link = "https://github.com/wipash"    #   https://github.com/toml-lang/toml#array-of-tables
+[[params.socials]]
+  name = "GitLab"
+  link = "https://gitlab.com/wipash"
 
 ```
 
 ### Theme
 
 To ensure Netlify [properly loads the Hugo theme](https://gohugo.io/hosting-and-deployment/hosting-on-netlify/#use-hugo-themes-with-netlify), the theme has to be added as a git [submodule](https://blog.github.com/2016-02-01-working-with-submodules/).
-I picked the [Beautiful Hugo](https://github.com/halogenica/beautifulhugo) theme from the [Hugo Themes](https://themes.gohugo.io/) page.
+I picked [YinYang](https://github.com/joway/hugo-theme-yinyang) theme from the [Hugo Themes](https://themes.gohugo.io/) page, and [forked it](https://github.com/wipash/hugo-theme-yinyang) so that I could modify it a bit.
 ```
-cd themes
-git submodule add https://github.com/halogenica/beautifulhugo.git beautifulhugo
+git submodule add git@github.com:wipash/hugo-theme-yinyang.git themes/yinyang
 ```
 I haven't used them all of this theme's in the above config, but more can be found [here](https://github.com/halogenica/beautifulhugo/blob/master/exampleSite/config.toml)
 
@@ -120,13 +96,13 @@ I haven't used them all of this theme's in the above config, but more can be fou
 Netlify gives the option to modify some basic settings when you connect it to your repo. To do more advanced configuration, create a file called `netlify.toml`
 The full breakdown of options is available [here](https://www.netlify.com/docs/netlify-toml-reference/)
 ```toml
-[build]                                 
+[build]
 publish = "public/"                     # The Hugo output folder that Netlify will publish
-command = "hugo --gc --minify"          # Run hugo with options to clean up unused cache files and 
+command = "hugo --gc --minify"          # Run hugo with options to clean up unused cache files and
                                         #   minify output
 [context.production.environment]        # Environment variables which Hugo will interpret
-HUGO_VERSION = "0.53"
+HUGO_VERSION = "0.74.3"
 HUGO_ENV = "production"
-HUGO_ENABLEGITINFO = "true"             # Lets the site access last Git revision information for 
+HUGO_ENABLEGITINFO = "true"             # Lets the site access last Git revision information for
                                         #   every content file
 ```

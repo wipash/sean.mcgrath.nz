@@ -1,5 +1,5 @@
 ---
-title: "WSL Setup"
+title: "WSL2 Setup"
 date: 2020-07-28T10:17:25+12:00
 tags:
   - WSL

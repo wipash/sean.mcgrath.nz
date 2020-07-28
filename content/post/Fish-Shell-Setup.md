@@ -136,7 +136,7 @@ end
 ' >> ~/.config/fish/config.fish
 ```
 
-### [exa](https://github.com/ogham/exa) - Improved `ls`
+### [exa](https://the.exa.website/) - Improved `ls`
 ```fish
 brew install exa
 ```

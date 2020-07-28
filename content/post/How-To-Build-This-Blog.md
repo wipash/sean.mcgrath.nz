@@ -56,7 +56,7 @@ newContentEditor = "vim"                # This is the editor that hugo will open
 metaDataFormat = "toml"
 PygmentsCodeFences = true
 PygmentsCodefencesGuessSyntax = true
-PygmentsStyle = "dracula"               # Code highlighting style
+PygmentsStyle = "monokailight"               # Code highlighting style
 enableEmoji = true                      # Lets you emojify text like "\:heart\:" -> :heart:
 
 [params]

@@ -6,7 +6,7 @@ newContentEditor = "vim"
 metaDataFormat = "toml"
 PygmentsCodeFences = true
 PygmentsCodefencesGuessSyntax = true
-PygmentsStyle = "dracula"
+PygmentsStyle = "monokailight"
 
 enableEmoji = true
 

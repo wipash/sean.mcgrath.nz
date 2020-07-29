@@ -124,7 +124,7 @@ omf install nvm
 ```fish
 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh | bash
 
-# Add Domebrew to path, and configure Fish autocompletions
+# Add Homebrew to path, and configure Fish autocompletions
 echo 'set -l brew "/home/linuxbrew/.linuxbrew/bin/brew"
 
 if [ -d "$HOME/.linuxbrew" ]

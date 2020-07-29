@@ -123,17 +123,24 @@ omf install nvm
 ### [homebrew](https://brew.sh/) - A third party package manager
 ```fish
 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh | bash
-omf install linuxbrew
 
-# Add Fish autocompletions
-echo '
+# Add Domebrew to path, and configure Fish autocompletions
+echo 'set -l brew "/home/linuxbrew/.linuxbrew/bin/brew"
+
+if [ -d "$HOME/.linuxbrew" ]
+    set brew "$HOME/.linuxbrew/bin/brew"
+end
+
+if [ -f "$brew" ]
+    eval (eval "$brew" shellenv)
+end
 if test -d (brew --prefix)"/share/fish/completions"
     set -gx fish_complete_path $fish_complete_path (brew --prefix)/share/fish/completions
 end
 if test -d (brew --prefix)"/share/fish/vendor_completions.d"
     set -gx fish_complete_path $fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
 end
-' >> ~/.config/fish/config.fish
+' > ~/.config/fish/conf.d/homebrew.fish
 ```
 
 ### [exa](https://the.exa.website/) - Improved `ls`
@@ -162,8 +169,7 @@ brew install git-delta
 sudo apt install grc
 
 # Add automatic aliases for GRC, override ls alias to ensure it always shows its own colours
-echo '
-source /etc/grc.fish
+echo 'source /etc/grc.fish
 function ls --inherit-variable executable --wraps=ls
     if isatty 1
         grc ls --color -C -w(tput cols) $argv
@@ -178,8 +184,7 @@ end
 The `highlight` application may slow down `less` too much for you, if so just remove the last `set` line.
 ```fish
 sudo apt install highlight
-echo '
-set -xU LESS_TERMCAP_md (printf "\e[01;31m")
+echo 'set -xU LESS_TERMCAP_md (printf "\e[01;31m")
 set -xU LESS_TERMCAP_me (printf "\e[0m")
 set -xU LESS_TERMCAP_se (printf "\e[0m")
 set -xU LESS_TERMCAP_so (printf "\e[01;44;33m")

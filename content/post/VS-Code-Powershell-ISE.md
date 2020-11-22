@@ -1,6 +1,11 @@
 ---
 title: "VS Code as a Replacement for PowerShell ISE"
 date: 2019-02-28T11:44:42-05:00
+tags:
+  - Windows
+  - VS Code
+categories:
+  - VS Code
 ---
 
 Microsoft has confirmed that the current PowerShell 5.1 will be the last Windows-specific version. With this announcement comes confirmation that PowerShell ISE will not be updated to support PowerShell 6 (aka **PowerShell Core**, you'll see it named one or the other in different places).

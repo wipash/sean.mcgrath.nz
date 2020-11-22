@@ -4,6 +4,8 @@ date: 2020-07-28T10:17:25+12:00
 tags:
   - WSL
   - Linux
+categories:
+  - WSL
 ---
 
 This post explains how to install WSL2, and install and configure Ubuntu.

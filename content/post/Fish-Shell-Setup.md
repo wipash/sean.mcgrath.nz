@@ -1,7 +1,10 @@
 ---
 title: "Fish Shell Setup"
-date: 2020-07-28T10:18:14+12:00
+date: 2020-11-23T10:45:14+13:00
 tags:
+  - WSL
+  - Linux
+categories:
   - Linux
 ---
 
@@ -180,6 +183,22 @@ end
 ' > ~/.config/fish/conf.d/grc.fish
 ```
 
+### [neovim](https://github.com/neovim/neovim) - Better Vim
+`neovim` is a continuation and extension of `vim`. I'm using the [`space-vim`](https://github.com/liuchengxu/space-vim) distribution which offers an improved interface and [key mappings](http://liuchengxu.org/space-vim-doc/tutorial/space-vim/). You can run `neovim` using the command `nvim`.
+```fish
+sudo apt install neovim
+curl https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh -o ~/spacevim.sh
+chmod +x ~/spacevim.sh
+./spacevim.sh --nvim
+```
+
+Add the [`vim-fish`](https://github.com/blankname/vim-fish) plugin under the `UserInit()` section in the space-vim config file. This plugin offers syntax hilighting for `.fish` config files.
+```fish
+nvim ~/.spacevim
+# Insert the following line under function! UserInit():
+Plug 'blankname/vim-fish'
+```
+
 ### Colourise `less`
 The `highlight` application may slow down `less` too much for you, if so just remove the last `set` line.
 ```fish
@@ -194,6 +213,7 @@ set -xU LESS "--RAW-CONTROL-CHARS"
 set -xU LESSOPEN "| /usr/bin/highlight %s --out-format xterm256 --force"
 ' > ~/.config/fish/conf.d/less.fish
 ```
+
 
 
 ## Further Fish config

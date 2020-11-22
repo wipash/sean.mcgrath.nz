@@ -3,6 +3,8 @@ title: "How To Build This Blog"
 date: 2019-01-05T18:08:35+13:00
 tags:
   - Hugo
+categories:
+  - Hugo
 ---
 
 This blog is built using [Hugo](https://gohugo.io/) and the [Beautiful Hugo](https://github.com/halogenica/beautifulhugo) theme.

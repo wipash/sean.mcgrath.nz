@@ -62,27 +62,34 @@ set -g theme_display_ruby no
 ## New SSH Agent Setup (2021 Edition)
 Assuming you have some SSH keys already in circulation, this updated guide makes it easier to share the keys between WSL2 and Windows.
 
-To start with, install PuTTY, including Pageant. You can use PuTTYgen to convert keys to PuTTY's format (`.ppk`). When converting, be sure to set the key comment to something that makes sense to identify the key.
+To start with, ensure that the Windows OpenSSH client is installed, and the agent is running:
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+Get-Service -Name ssh-agent | Set-Service -StartupType Automatic
+Start-Service ssh-agent
+```
 
-Once installed, create a startup shortcut so that Pageant starts on Windows boot:
-1. Open `shell:startup` using the Run prompt
-2. Create a shortcut to pageant.exe using the following settings:
-   - Target: `C:\Program Files\PuTTY\pageant.exe" id_rsa-sean.ppk id_rsa_anotherkey.ppk`
-   - Start in: `C:\Users\sean\.ssh` (Or replace with the directory that your keys are stored in)
-3. Pageant will now start on Windows boot, and prompt for any keys
+Add keys to the agent:
+```
+ssh-add C:\Users\sean\.ssh\id_rsa-sean
+```
 
-Once Pagent is running, you can use [wsl2-ssh-pageant](https://github.com/BlackReloaded/wsl2-ssh-pageant) to create a socket that you can use as an SSH agent in WSL2:
+Once ssh-agent is running, you can use [npiperelay](https://github.com/jstarks/npiperelay/) to create a socket in WSL2 that connects to the namedpipe from ssh-agent running in Windows:
 1. Run `sudo apt-get install socat`
-2. Install wsl2-ssh-pageant:
-   - `wget -O "$HOME/.ssh/wsl2-ssh-pageant.exe" https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe`
-   - `chmod +x "$HOME/.ssh/wsl2-ssh-pageant.exe"`
-3. Add the following startup command to `~/.config/fish/conf.d/wsl2-ssh-pageant`:
+2. Install npiperelay:
+```fish
+wget -O "$HOME/npiperelay.zip" "https://github.com/jstarks/npiperelay/releases/latest/download/npiperelay_windows_amd64.zip"
+unzip -j "$HOME/npiperelay.zip" "npiperelay.exe" -d "$HOME/.ssh/npiperelay.exe"
+rm "$HOME/npiperelay.zip"
+chmod +x "$HOME/.ssh/npiperelay.exe"
+```
+3. Add the following startup command to `~/.config/fish/conf.d/wsl-ssh-agent.fish`:
 ```fish
 set -x SSH_AUTH_SOCK $HOME/.ssh/agent.sock
 ss -a | grep -q $SSH_AUTH_SOCK
 if [ $status != 0 ]
-  rm -f $SSH_AUTH_SOCK
-  setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:$HOME/.ssh/wsl2-ssh-pageant.exe >/dev/null 2>&1 &
+    rm -f $SSH_AUTH_SOCK
+    setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"$HOME/.ssh/npiperelay.exe -ei -s //./pipe/openssh-ssh-agent" >/dev/null 2>&1 &
 end
 ```
 

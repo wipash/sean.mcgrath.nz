@@ -59,7 +59,55 @@ set -g theme_display_ruby no
 " >> ~/.config/fish/config.fish
 ```
 
-## SSH Agent Setup
+## New SSH Agent Setup (2021 Edition)
+Assuming you have some SSH keys already in circulation, this updated guide makes it easier to share the keys between WSL2 and Windows.
+
+To start with, install PuTTY, including Pageant. You can use PuTTYgen to convert keys to PuTTY's format (`.ppk`). When converting, be sure to set the key comment to something that makes sense to identify the key.
+
+Once installed, create a startup shortcut so that Pageant starts on Windows boot:
+1. Open `shell:startup` using the Run prompt
+2. Create a shortcut to pageant.exe using the following settings:
+   - Target: `C:\Program Files\PuTTY\pageant.exe" id_rsa-sean.ppk id_rsa_anotherkey.ppk`
+   - Start in: `C:\Users\sean\.ssh` (Or replace with the directory that your keys are stored in)
+3. Pageant will now start on Windows boot, and prompt for any keys
+
+Once Pagent is running, you can use [wsl2-ssh-pageant](https://github.com/BlackReloaded/wsl2-ssh-pageant) to create a socket that you can use as an SSH agent in WSL2:
+1. Run `sudo apt-get install socat`
+2. Install wsl2-ssh-pageant:
+   - `wget -O "$HOME/.ssh/wsl2-ssh-pageant.exe" https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe`
+   - `chmod +x "$HOME/.ssh/wsl2-ssh-pageant.exe"`
+3. Add the following startup command to `~/.config/fish/conf.d/wsl2-ssh-pageant`:
+```fish
+set -x SSH_AUTH_SOCK $HOME/.ssh/agent.sock
+ss -a | grep -q $SSH_AUTH_SOCK
+if [ $status != 0 ]
+  rm -f $SSH_AUTH_SOCK
+  setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:$HOME/.ssh/wsl2-ssh-pageant.exe >/dev/null 2>&1 &
+end
+```
+
+If you need to differentiate between keys, for example to use different github accounts, you can identify the keys based on their public keys.
+1. Create public keys from all keys in the agent:
+```fish
+cd ~/.ssh
+ssh-add -L | gawk ' { print $0 > $3 ".pub" } '
+chmod 600 ~/.ssh/id_*
+```
+2. Identify the key you want to use in `~/.ssh/config` by this public key. For example:
+```
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/sean@mcgrath.net.nz.pub
+    IdentitiesOnly yes
+Host workgithub
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/sean@mycompany.co.nz.pub
+    IdentitiesOnly yes
+```
+
+## Old SSH Agent Setup
 I use a couple of different SSH keys to remote in to various systems. It's handy if ssh-agent is started when you first open Ubuntu, and persists with your Windows session.
 
 Generate a private key if you don't have one. Be sure to set a password. Functionally you don't have to, but it's good security practice.

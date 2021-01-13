@@ -79,7 +79,7 @@ Once ssh-agent is running, you can use [npiperelay](https://github.com/jstarks/n
 2. Install npiperelay:
 ```fish
 wget -O "$HOME/npiperelay.zip" "https://github.com/jstarks/npiperelay/releases/latest/download/npiperelay_windows_amd64.zip"
-unzip -j "$HOME/npiperelay.zip" "npiperelay.exe" -d "$HOME/.ssh/npiperelay.exe"
+unzip -j "$HOME/npiperelay.zip" "npiperelay.exe" -d "$HOME/.ssh/"
 rm "$HOME/npiperelay.zip"
 chmod +x "$HOME/.ssh/npiperelay.exe"
 ```
@@ -89,7 +89,7 @@ set -x SSH_AUTH_SOCK $HOME/.ssh/agent.sock
 ss -a | grep -q $SSH_AUTH_SOCK
 if [ $status != 0 ]
     rm -f $SSH_AUTH_SOCK
-    setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"$HOME/.ssh/npiperelay.exe -ei -s //./pipe/openssh-ssh-agent" >/dev/null 2>&1 &
+    setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"$HOME/.ssh/npiperelay.exe -ei -s //./pipe/openssh-ssh-agent" >/dev/null 2>&1 & disown
 end
 ```
 

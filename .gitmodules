@@ -1,3 +1,4 @@
 [submodule "themes/yinyang"]
 	path = themes/yinyang
 	url = https://github.com/wipash/hugo-theme-yinyang
+	branch = master

@@ -103,7 +103,7 @@ publish = "public/"                     # The Hugo output folder that Netlify wi
 command = "hugo --gc --minify"          # Run hugo with options to clean up unused cache files and
                                         #   minify output
 [context.production.environment]        # Environment variables which Hugo will interpret
-HUGO_VERSION = "0.92.2"
+HUGO_VERSION = "0.98.0"
 HUGO_ENV = "production"
 HUGO_ENABLEGITINFO = "true"             # Lets the site access last Git revision information for
                                         #   every content file

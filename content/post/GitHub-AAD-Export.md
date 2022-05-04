@@ -1,7 +1,6 @@
 ---
 title: "GitHub Actions - Azure AD Export"
 date: 2022-05-04T12:36:36+12:00
-draft: true
 tags:
   - Azure
   - GitHub

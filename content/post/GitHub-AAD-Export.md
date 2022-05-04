@@ -174,6 +174,7 @@ The full workflow file is saved in `.github/workflows/aad_export.yaml`, and look
 name: Azure AD Config Backup
 
 on:
+  # Allow manual backups to be triggered from GitHub's Actions page
   workflow_dispatch:
 
   # Runs daily at 4pm UTC
@@ -181,7 +182,9 @@ on:
     - cron: "0 16 * * *"
 
 permissions:
+  # id-token permission is required for OIDC
   id-token: write
+  # contents permission is required to commit changed files
   contents: write
 
 jobs:
@@ -197,7 +200,10 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          # Let us use Azure PowerShell to retrieve the access token in the next step
           enable-AzPSSession: true
+          # This app doesn't have any roles, so no subscriptions show up when you log in.
+          #  Normally that state would fail this step, but we can allow it to continue with this option
           allow-no-subscriptions: true
 
       - name: Log in to MS Graph and back up Azure AD

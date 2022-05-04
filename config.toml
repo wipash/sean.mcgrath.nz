@@ -31,7 +31,7 @@ enableEmoji = true
 #   name = "About"
 #   link = "/page/about"
 [[params.socials]]
-  name = "Github"
+  name = "GitHub"
   link = "https://github.com/wipash"
 [[params.socials]]
   name = "GitLab"

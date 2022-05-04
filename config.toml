@@ -1,12 +1,13 @@
 baseURL = "https://sean.mcgrath.nz/"
 languageCode = "en-us"
 title = "Sean McGrath"
-theme = "yinyang"
+theme = ["hugo-notice", "yinyang"]
 newContentEditor = "vim"
 metaDataFormat = "toml"
 PygmentsCodeFences = true
 PygmentsCodefencesGuessSyntax = true
 PygmentsStyle = "monokailight"
+extraCSSFiles = ["css/override.css"]
 
 enableEmoji = true
 

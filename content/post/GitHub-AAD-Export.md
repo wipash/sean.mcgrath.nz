@@ -137,7 +137,9 @@ To facilitate this, create three secrets in your repository, and add the relevan
 
 I'm using the following script to log in to MS Graph using the access token retrieved by `azure/login@v1`, and then export our AD config. I've chosen to export pretty much all types of config supported by `Export-AzureAD`, with the exception of `users`, `serviceprincipals`, `pim`, `pimazure`, and `pimaad`, as they export way too much data (and subsequently the export takes hours to run).
 
-I'm also using my own fork of the [https://github.com/microsoft/azureadexporter](https://github.com/microsoft/azureadexporter) repository, as there's currently a bug in the official repo that doesn't sort dictionaries properly, resulting in messy diffs as properties sometimes move up and down in the output files. Once [#16](https://github.com/microsoft/azureadexporter/pull/16) is merged (or another fix is implemented), I will switch back to using the official repo via `Install-Module AzureADExporter`.
+~~I'm also using my own fork of the [https://github.com/microsoft/azureadexporter](https://github.com/microsoft/azureadexporter) repository, as there's currently a bug in the official repo that doesn't sort dictionaries properly, resulting in messy diffs as properties sometimes move up and down in the output files. Once [#16](https://github.com/microsoft/azureadexporter/pull/16) is merged (or another fix is implemented), I will switch back to using the official repo via `Install-Module AzureADExporter`.~~
+
+This fix has now been merged!
 
 ```powershell
 ## Install MS Graph auth module, and log in to MS Graph
@@ -155,11 +157,7 @@ Get-ChildItem $OutputPath | Remove-Item -Recurse -Force
 
 ## Install AzureADExporter
 Write-Host '## Installing AzureADExporter'
-# Install-Module AzureADExporter -Scope CurrentUser -Force
-#### Temporary fix ####
-git clone "https://github.com/wipash/azureadexporter" --branch recursion-fix ../azureadexporter
-Import-Module ../azureadexporter/src/AzureADExporter.psd1 -Force
-#######################
+Install-Module AzureADExporter -Scope CurrentUser -Force
 
 ## Export AAD Config
 Write-Host '## Exporting Azure AD config'
@@ -169,7 +167,6 @@ Export-AzureAD -Path $OutputPath -Type 'AccessReviews', 'ConditionalAccess', 'Gr
 
 The full workflow file is saved in `.github/workflows/aad_export.yaml`, and looks like this:
 
-[aad_export.yaml](https://gist.github.com/wipash/49d76b4c244eeed51a417b49095dfc09)
 ```yaml
 name: Azure AD Config Backup
 
@@ -226,11 +223,7 @@ jobs:
 
             ## Install AzureADExporter
             Write-Host '## Installing AzureADExporter'
-            # Install-Module AzureADExporter -Scope CurrentUser -Force
-            #### Temporary fix ####
-            git clone https://github.com/wipash/azureadexporter --branch recursion-fix ../azureadexporter
-            Import-Module ../azureadexporter/src/AzureADExporter.psd1 -Force
-            #######################
+            Install-Module AzureADExporter -Scope CurrentUser -Force
 
             ## Export AAD Config
             Write-Host '## Exporting Azure AD config'

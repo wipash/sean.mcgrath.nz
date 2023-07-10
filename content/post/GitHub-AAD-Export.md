@@ -144,8 +144,8 @@ This fix has now been merged!
 ```powershell
 ## Install MS Graph auth module, and log in to MS Graph
 Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -Force
-$token = Get-AzAccessToken -ResourceTypeName MSGraph
-Connect-MgGraph -AccessToken $token.Token
+$token = (Get-AzAccessToken -ResourceTypeName MSGraph).Token | ConvertTo-SecureString -AsPlainText -Force
+Connect-MgGraph -AccessToken $token
 Get-MgContext
 $global:TenantID = (Get-MgContext).TenantId
 
@@ -210,8 +210,8 @@ jobs:
           inlineScript: |
             ## Install MS Graph auth module, and log in to MS Graph
             Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -Force
-            $token = Get-AzAccessToken -ResourceTypeName MSGraph
-            Connect-MgGraph -AccessToken $token.Token
+            $token = (Get-AzAccessToken -ResourceTypeName MSGraph).Token | ConvertTo-SecureString -AsPlainText -Force
+            Connect-MgGraph -AccessToken $token
             Get-MgContext
             $global:TenantID = (Get-MgContext).TenantId
 

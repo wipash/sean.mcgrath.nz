@@ -1,5 +1,5 @@
 ---
-title: "Fish Shell Setup"
+title: "Fish Shell & WSL Setup"
 date: 2020-11-23T10:45:14+13:00
 tags:
   - WSL
@@ -9,7 +9,7 @@ categories:
 ---
 
 [Fish shell](https://fishshell.com/) is an alternative to bash with a lot of quality of life improvements.
-This post explains how I set up and configure Fish.
+This post explains how I set up and configure Fish, with a bunch of general WSL settings thrown in as well.
 <!--more-->
 The language is slightly different to bash, for example:
 
@@ -58,8 +58,14 @@ set -g theme_display_vagrant no
 set -g theme_display_ruby no
 " >> ~/.config/fish/config.fish
 ```
+## SSH & Git Setup
+This section assumes you have 1Password, with your SSH key saved to your vault and the 'Use the SSH agent' developer setting enabled.
+Read more about that here: [https://developer.1password.com/docs/ssh/agent/](https://developer.1password.com/docs/ssh/agent/)
 
-## New SSH Agent Setup (2021 Edition)
+{{< notice tip >}}
+If you don't use 1Password, and want to proxy the ssh-agent running from within Windows:
+{{< detail "SSH Agent Setup - Windows Agent" >}}
+## SSH Agent Setup - Windows Agent
 Assuming you have some SSH keys already in circulation, this updated guide makes it easier to share the keys between WSL2 and Windows.
 
 To start with, ensure that the Windows OpenSSH client is installed, and the agent is running:
@@ -113,8 +119,11 @@ Host workgithub
     IdentityFile ~/.ssh/sean@mycompany.co.nz.pub
     IdentitiesOnly yes
 ```
+{{< /detail >}}
 
-## Old SSH Agent Setup
+If you don't want any interaction with Windows at all, and just want to automatically load your keys into an ssh-agent when WSL starts:
+{{< detail "SSH Agent Setup - Linux Agent" >}}
+## SSH Agent Setup - Linux Agent
 I use a couple of different SSH keys to remote in to various systems. It's handy if ssh-agent is started when you first open Ubuntu, and persists with your Windows session.
 
 Generate a private key if you don't have one. Be sure to set a password. Functionally you don't have to, but it's good security practice.
@@ -165,6 +174,46 @@ if status --is-interactive
         start_agent
     end
 end
+```
+{{< /detail >}}
+{{< /notice >}}
+
+Create a fish config file to alias `ssh` and `ssh-add` to the Windows executables:
+```bash
+echo '
+function ssh-add
+  /mnt/c/Windows/System32/OpenSSH/ssh-add.exe $argv
+end
+
+function ssh
+  /mnt/c/Windows/System32/OpenSSH/ssh.exe $argv
+end
+' >> ~/.config/fish/conf.d/aliases.fish
+```
+
+Configure `git` to use Windows `ssh.exe`:
+```bash
+git config --global core.sshCommand ssh.exe
+```
+
+## Make WSL start faster
+I've found that WSL can take a long time to start, if you have a lot of things in your Windows PATH variable. You can disable adding Windows
+PATH variables to WSL by creating a `wsl.conf` file, see this reference: [https://learn.microsoft.com/en-us/windows/wsl/wsl-config#interop-settings](https://learn.microsoft.com/en-us/windows/wsl/wsl-config#interop-settings)
+
+```bash
+echo '
+[interop]
+appendWindowsPath = false
+' >> /etc/wsl.conf
+```
+
+This has the side effect of breaking some useful WSL integrations, like running VS Code in Windows connected to WSL by typing `code`. You can fix that by adding another alias (you might need to update the path to VS Code if you have it installed in a different location):
+```bash
+echo '
+function code
+  /mnt/c/Program\ Files/Microsoft\ VS\ Code/bin/code $argv
+end
+' >> ~/.config/fish/conf.d/aliases.fish
 ```
 
 ## Install [NVM](https://github.com/nvm-sh/nvm) (Node.js Version Manager)

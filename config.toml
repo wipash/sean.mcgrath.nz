@@ -36,3 +36,6 @@ enableEmoji = true
 [[params.socials]]
   name = "GitLab"
   link = "https://gitlab.com/wipash"
+
+[markup.goldmark.renderer]
+  unsafe= true
